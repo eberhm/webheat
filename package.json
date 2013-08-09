@@ -1,0 +1,12 @@
+{
+  "name": "webheat",
+  "version": "0.0.0",
+  "description": "Website Realtime Heatmap Analitycs Tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "ebeer",
+  "license": "BSD"
+}
