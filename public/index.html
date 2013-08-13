@@ -1,9 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>Site de ejemplo</title>
 </head>
-<body>
-
+<body style="
+    width: 100%;
+    height: 100%;
+    background-color: grey;
+">
+<script src="/bower_components/jquery/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    $(function(){
+        $('*').on('click', function(e){
+            var img = new Image();
+            img.src = 'http://localhost:3000/pixel/x=' + e.pageX + '&y=' + e.pageY + '&url=asfsfa';
+            //heatmap.store.addDataPoint(e.layerX, e.layerY, 1);
+            $(document.body).append(img);
+        });
+    });
+</script>
 </body>
 </html>

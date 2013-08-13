@@ -1,10 +1,18 @@
 var express = require('express'),
+    http = require('http'),
     MongoClient = require('mongodb').MongoClient,
-    app = express();
+    app = express(),
+    server = http.createServer(app),
+    io = require('socket.io').listen(server),
+    events = require('events'),
+    Sandbox = function() {},
+    bus;
 
-//const HOST = 'localhost';
+    Sandbox.prototype = new events.EventEmitter;
+    bus = new Sandbox();
+
+
 const PORT = 3000;
-const io = require('socket.io').listen(app);
 
 
 MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
@@ -12,7 +20,7 @@ MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
     if(err) throw err;
 
     //pixel request
-    app.get('/pixel/\?x=:x&y=:y&url=:url', function(req, res, error) {
+    app.get('/pixel/x=:x&y=:y&url=:url', function(req, res, error) {
         //save data into db
         var data = {
             pos: {
@@ -21,14 +29,18 @@ MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
             },
             url: req.param('url')
         };
-        collection.insert(data, function() {});
+        collection.insert(data, function() {
+            bus.emit('insert', data);
+        });
 
         res.status(200).sendfile('resources/img/logo_e.jpg');
         console.log(data);
     });
 
     io.sockets.on('connection', function(socket) {
-        collection.on('insert', function(data) {
+        console.log('registering insert event');
+        bus.on('insert', function(data) {
+            console.log('received insert event');
             socket.emit('data', data);
         });
     });
@@ -42,5 +54,5 @@ app.get('/heatmap/\?url=:url', function(req, res, error) {
 
 app.use("/", express.static('public'));
 
-app.listen(PORT);
+server.listen(PORT);
 console.log("Estoy oyendo por express en la la direccion %s y mi directorio es %s", app.address, __dirname);

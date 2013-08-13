@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Heatmap</title>
+</head>
+<body>
+<div id="map" style="background-color: grey;"></div>
+<script src="/bower_components/heatmap.js/src/heatmap.js"></script>
+<script src="/bower_components/jquery/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    window.onload = function(){
+
+        var socket = io.connect('http://localhost:3000/');
+        var map = $('#map');
+
+        map.css({
+            'width': $(window).width(),
+            'height': $(window).height(),
+            'background-color' : 'grey'
+        });
+
+        // heatmap configuration
+        var config = {
+            element: map.get(0),
+            radius: 5,
+            opacity: 50,
+            legend: {
+                position: 'br',
+                title: 'Clicks'
+            }
+        };
+
+        //creates and initializes the heatmap
+        var heatmap = h337.create(config);
+
+        socket.on('data', function (data) {
+            console.log('received a message: ', data);
+            heatmap.store.addDataPoint(data.pos.x, data.pos.y, 1);
+        });
+    };
+</script>
+</body>
+</html>
