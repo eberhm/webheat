@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cliente WebHeat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link rel="stylesheet" href="/bower_components/jquery-mobile-bower/css/jquery.mobile-1.3.2.min.css" />-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/bower_components/requirejs/require.js"></script>
+    <script src="/bower_components/jquery/jquery.min.js"></script>
+    <!--<script src="/bower_components/jquery-mobile-bower/js/jquery.mobile-1.3.2.min.js"></script>-->
+</head>
+<body>
+<div data-widget="heatmap" style="display:none;"></div>
+<div data-widget="filters">
+    <form>
+        <input type="text" name="url">
+        <button type="submit">Apply</button>
+    </form>
+</div>
+<script type="text/javascript">
+    require.config({
+        shim: {
+            "heatmap": {
+                exports: "h337"
+            },
+            "backbone": {
+                deps: ["underscore"],
+                exports: "Backbone"
+            },
+            "underscore": {
+                exports: "_"
+            }
+        },
+        waitSeconds: 0,
+        baseUrl: '/app',
+        paths: {
+            "jquery"    : "/bower_components/jquery/jquery.min",
+            "backbone"  : "/bower_components/backbone/backbone-min",
+            "underscore": "/bower_components/underscore/underscore-min",
+            "heatmap"   : "/bower_components/heatmap.js/src/heatmap"
+        },
+        map: {
+            "*": {
+                "jq": "components/require-jq/jq",
+                "css": "components/require-css/css"
+            }
+        }
+    });
+    require(['main']);
+</script>
+</body>
+</html>

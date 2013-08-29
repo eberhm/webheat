@@ -13,8 +13,9 @@
 <script>
     $(function(){
         $('*').on('click', function(e){
-            var img = new Image();
-            img.src = 'http://localhost:3000/pixel/x=' + e.pageX + '&y=' + e.pageY + '&url=asfsfa';
+            var url = window.location.href;
+            var src = 'http://localhost:3000/pixel?x=' + e.pageX + '&y=' + e.pageY + '&url=' + encodeURIComponent(url);
+            var img = '<img src="' + src + '" />';
             //heatmap.store.addDataPoint(e.layerX, e.layerY, 1);
             $(document.body).append(img);
         });

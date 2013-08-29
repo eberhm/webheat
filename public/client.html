@@ -32,11 +32,15 @@
         };
 
         //creates and initializes the heatmap
-        var heatmap = h337.create(config);
+        var heatmap = h337.create(config),
+            channel = 12345,
+            url = 'http://localhost:3000/index.html?asdffdf=33';
 
-        socket.on('data', function (data) {
-            console.log('received a message: ', data);
-            heatmap.store.addDataPoint(data.pos.x, data.pos.y, 1);
+        $.getJSON('/channel?url=' + encodeURIComponent(url), function(response) {
+            socket.on(response.channel, function (data) {
+                console.log('received a message: ', data);
+                heatmap.store.addDataPoint(data.pos.x, data.pos.y, 1);
+            });
         });
     };
 </script>
